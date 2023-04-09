@@ -1,3 +1,4 @@
 *.pem
 *.DS_Store
-data/registry
+volumes/registry
+volumes/*
