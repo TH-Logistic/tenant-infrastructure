@@ -1,4 +1,4 @@
 *.pem
 *.DS_Store
 volumes/registry
-volumes/*
+# volumes/*

@@ -1,0 +1,16 @@
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+
+    server_name thinhlh.com www.thinhlh.com;
+
+    ssl_certificate /etc/nginx/ssl/live/thinhlh.com/fullchain.pem;
+    ssl_certificate_key /etc/nginx/ssl/live/thinhlh.com/privkey.pem;
+
+    location / {
+        proxy_pass  http://localhost:8080/;
+        proxy_http_version 1.1;
+
+        client_max_body_size 2G;
+    }
+}
