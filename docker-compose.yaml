@@ -12,15 +12,19 @@ services:
     networks:
       - web_server_net
 
+  # Nginx & Certbot refer to https://mindsers.blog/post/https-using-nginx-certbot-docker/
   nginx:
     image: nginx
     container_name: nginx_container
     volumes:
       - ./volumes/nginx/config/:/etc/nginx/conf.d/:ro
-      - ./volumes/nginx/certbot/www:/var/www/certbot/:ro
+      - ./volumes/nginx/certbot/www/:/var/www/certbot/:ro # Map acme volumes to host volumes (which eventually mapped to certbot)
+      - ./volumes/nginx/certbot/conf/:/etc/nginx/ssl/:ro  # Map certificates from host to nginx container for acme references
     ports:
       - 80:80
       - 443:443
+    networks:
+      - web_server_net
     restart: always
 
 
@@ -29,8 +33,9 @@ services:
     image: certbot/certbot
     container_name: certbot_container
     volumes:
-      - ./volumes/nginx/certbot/www/:/var/www/certbot/:rw
-    command: certonly --webroot --webroot-path /var/www/certbot/ --email thinhlh0812@gmail.com --dry-run -d thinhlh.com -d www.thinhlh.com -n
+      - ./volumes/nginx/certbot/www/:/var/www/certbot/:rw # Map host volume to certbot create cert folder, which then mapped from host to nginx
+      - ./volumes/nginx/certbot/conf/:/etc/letsencrypt/:rw # Map certificates created folder by certbot to host folder
+    command: certonly --webroot --webroot-path /var/www/certbot/ --email thinhlh0812@gmail.com -d thinhlh.com -d www.thinhlh.com -n --agree-tos
     depends_on:
       - nginx
 
