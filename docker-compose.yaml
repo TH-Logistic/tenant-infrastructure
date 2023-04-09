@@ -22,15 +22,17 @@ services:
       - 80:80
       - 443:443
     restart: always
-    depends_on:
-      - certbot
 
+
+  # After this service run and create ssl certificate we need to reload the nginx service to consume the new certificate
   certbot:
     image: certbot/certbot
     container_name: certbot_container
     volumes:
       - ./volumes/nginx/certbot/www/:/var/www/certbot/:rw
-    command: certonly --webroot --webroot-path /var/www/certbot/ --dry-run -d thinhlh.com -d www.thinhlh.com -n
+    command: certonly --webroot --webroot-path /var/www/certbot/ --email thinhlh0812@gmail.com --dry-run -d thinhlh.com -d www.thinhlh.com -n
+    depends_on:
+      - nginx
 
   # nginx:
   #   image: nginx
