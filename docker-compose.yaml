@@ -13,16 +13,24 @@ services:
       - web_server_net
 
   nginx:
-    image: jonasal/nginx-certbot
+    image: nginx
+    container_name: nginx_container
     volumes:
-      - ./volumes/nginx/config:/etc/nginx/conf.d
-      - ./volumes/nginx/nginx_secrets:/etc/letsencrypt
-    environment:
-      - CERTBOT_EMAIL=thinhlh0812@gmail.com
+      - ./volumes/nginx/config/:/etc/nginx/conf.d/:ro
+      - ./volumes/nginx/certbot/www:/var/www/certbot/:ro
     ports:
       - 80:80
       - 443:443
     restart: always
+    depends_on:
+      - certbot
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot_container
+    volumes:
+      - .volumes/nginx/certbot/www/:/var/www/certbot/:rw
+    command: certonly --webroot --webroot-path /var/www/certbot/ --dry-run -d thinhlh.com -d www.thinhlh.com -n
 
   # nginx:
   #   image: nginx
