@@ -5,15 +5,7 @@ services:
     image: registry
     container_name: registry_container
     volumes:
-      - registry-data:/var/lib/registry
+      - ./data/registry:/var/lib/registry
     ports:
       - 5001:5000
     restart: always
-
-volumes:
-  registry-data:
-    driver: local
-    driver_opts:
-      o: bind
-      type: none
-      device: ./data/registry
