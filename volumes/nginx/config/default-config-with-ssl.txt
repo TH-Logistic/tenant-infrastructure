@@ -1,6 +1,8 @@
+
 upstream registry {
-    http://registry_container:5000
+    server registry_container:5000;
 }
+
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
@@ -28,7 +30,7 @@ server {
     ssl_certificate_key /etc/nginx/ssl/live/thinhlh.com/privkey.pem;
 
     location / {
-        proxy_pass registry;
+        proxy_pass http://registry/;
         proxy_http_version 1.1;
 
         client_max_body_size 2G;
