@@ -1,3 +1,5 @@
+#!/bin/bash
+
 sudo apt-get update
 sudo apt-get install \
     ca-certificates \
@@ -18,7 +20,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 sudo service docker start
 
-sudo apt  install docker-compose
+sudo apt install docker-compose
 
 sudo usermod -aG docker $USER
 
