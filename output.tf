@@ -1,4 +1,4 @@
-output "aws_instances" {
-  value       = aws_instance.th-ec2.*.public_ip
-  description = "Public IP of instance"
+output "elastic_public_ip" {
+  description = "Contains the public IP address"
+  value       = aws_eip.th_eip.public_ip
 }

@@ -3,7 +3,7 @@
 # Server detail
 
 ```
-ssh -i "thinh-hieu-keypair.pem" ubuntu@ec2-54-254-174-225.ap-southeast-1.compute.amazonaws.com
+ssh -i "th2_key_pair.pem" ubuntu@www.thinhlh.com
 ```
 
 # Steps to setup nginx server with certbot

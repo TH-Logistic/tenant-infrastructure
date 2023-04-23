@@ -28,6 +28,9 @@ resource "aws_instance" "th-ec2" {
   tags = {
     "Name" = "th-ec2"
   }
+  root_block_device {
+    volume_size = 40
+  }
 }
 
 resource "aws_security_group" "public_security" {
