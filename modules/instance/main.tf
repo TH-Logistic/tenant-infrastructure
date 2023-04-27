@@ -65,11 +65,3 @@ resource "aws_route_table" "to_internet_gateway" {
     gateway_id = var.internet_gateway_id
   }
 }
-
-# # Elastic IP
-
-# resource "aws_eip" "eip" {
-#   instance = aws_instance.instance.id
-#   vpc      = true
-# }
-

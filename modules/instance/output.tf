@@ -3,7 +3,7 @@ output "public_ip" {
   value = aws_instance.instance.public_ip
 }
 
-# output "instance_ip" {
-#   description = "public IP assress of instance"
-#   value = aws_instance.instance.public_ip
-# }
+output "instance_id" {
+  description = "instance id"
+  value = aws_instance.instance.id
+}
