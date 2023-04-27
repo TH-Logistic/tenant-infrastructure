@@ -31,38 +31,38 @@ module "instance_auth" {
   instance_name = "th-auth"
 }
 
-# module "instance_product" {
-#   source = "./modules/instance"
+module "instance_product" {
+  source = "./modules/instance"
 
-#   key_pair_name = module.instance_key_pair.key_pair_name
-#   instance_name = "th-product"
-# }
+  key_pair_name = module.instance_key_pair.key_pair_name
+  instance_name = "th-product"
+}
 
-# module "instance_transportation" {
-#   source = "./modules/instance"
+module "instance_transportation" {
+  source = "./modules/instance"
 
-#   key_pair_name = module.instance_key_pair.key_pair_name
-#   instance_name = "th-transportation"
-# }
+  key_pair_name = module.instance_key_pair.key_pair_name
+  instance_name = "th-transportation"
+}
 
-# module "instance_orgarnization" {
-#   source = "./modules/instance"
+module "instance_orgarnization" {
+  source = "./modules/instance"
 
-#   key_pair_name = module.instance_key_pair.key_pair_name
-#   instance_name = "th-orgarnization"
-# }
+  key_pair_name = module.instance_key_pair.key_pair_name
+  instance_name = "th-orgarnization"
+}
 
-# module "instance_route" {
-#   source = "./modules/instance"
+module "instance_route" {
+  source = "./modules/instance"
 
-#   key_pair_name = module.instance_key_pair.key_pair_name
-#   instance_name = "th-route"
-# }
+  key_pair_name = module.instance_key_pair.key_pair_name
+  instance_name = "th-route"
+}
 
-# module "instance_user" {
-#   source = "./modules/instance"
+module "instance_user" {
+  source = "./modules/instance"
 
-#   key_pair_name = module.instance_key_pair.key_pair_name
-#   instance_name = "th-user"
-# }
+  key_pair_name = module.instance_key_pair.key_pair_name
+  instance_name = "th-user"
+}
 
