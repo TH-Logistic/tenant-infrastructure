@@ -1,3 +1,18 @@
+variable "vpc_id" {
+  description = "vpc id for instance"
+  type =  string
+}
+
+variable "internet_gateway_id" {
+  description = "internet gateway for instance & vpc to connect to internet"
+  type = string
+}
+
+variable "subnet_cidr" {
+  description = "subnet cidr used for each instance"
+  type = string
+}
+
 variable "instance_name" {
     description = "instance name"
     type = string

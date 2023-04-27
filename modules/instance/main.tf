@@ -1,7 +1,7 @@
 # Defined resources for ec2 to run and expose port to the out side word.
 # Refer to the image.png file. These resources will be placed from inside to outside
 # Start with EC2 -> Security Group -> Subnet
-# -> Route_Table_association (1-n table)inside n-n relationship between  route table & subnet
+# -> Route_Table_association (1-n table)inside n-n relationship between route table & subnet
 # -> VPC -> Internet gateway
 
 resource "aws_instance" "instance" {
@@ -20,7 +20,7 @@ resource "aws_instance" "instance" {
 }
 
 resource "aws_security_group" "public_security" {
-  vpc_id = aws_vpc.public_vpc.id
+  vpc_id = var.vpc_id
 
   egress {
     description = "Any outbound allowed"
@@ -46,8 +46,8 @@ resource "aws_security_group" "public_security" {
 }
 
 resource "aws_subnet" "public_subnet" {
-  vpc_id            = aws_vpc.public_vpc.id
-  cidr_block        = "10.0.1.0/24"
+  vpc_id            = var.vpc_id
+  cidr_block        = var.subnet_cidr
   availability_zone = "us-east-1b"
 
   map_public_ip_on_launch = true
@@ -59,25 +59,17 @@ resource "aws_route_table_association" "rta" {
 }
 
 resource "aws_route_table" "to_internet_gateway" {
-  vpc_id = aws_vpc.public_vpc.id
+  vpc_id = var.vpc_id
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.internet_gateway.id
+    gateway_id = var.internet_gateway_id
   }
 }
 
-resource "aws_vpc" "public_vpc" {
-  cidr_block = "10.0.0.0/16"
-}
+# # Elastic IP
 
-resource "aws_internet_gateway" "internet_gateway" {
-  vpc_id = aws_vpc.public_vpc.id
-}
-
-# Elastic IP
-
-resource "aws_eip" "eip" {
-  instance = aws_instance.instance.id
-  vpc      = true
-}
+# resource "aws_eip" "eip" {
+#   instance = aws_instance.instance.id
+#   vpc      = true
+# }
 
