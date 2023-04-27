@@ -1,4 +1,3 @@
-
 upstream registry {
     server registry_container:5000;
 }

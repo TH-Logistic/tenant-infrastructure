@@ -11,102 +11,58 @@ provider "aws" {
   profile = "mck-sandbox"
 }
 
-# Defined resources for ec2 to run and expose port to the out side word.
-# Refer to the image.png file. These resources will be placed from inside to outside
-# Start with EC2 -> Security Group -> Subnet
-# -> Route_Table_association (1-n table)inside n-n relationship between  route table & subnet
-# -> VPC -> Internet gateway
+module "instance_key_pair" {
+  source = "./modules/key_pair"
 
-
-resource "aws_instance" "th-ec2" {
-  ami                    = var.aws_instance_ami
-  instance_type          = var.aws_instance_type
-  key_name               = aws_key_pair.th_key_pair.key_name
-  user_data              = file("./scripts/ec2-user-data-ubuntu.sh")
-  vpc_security_group_ids = [aws_security_group.public_security.id]
-  subnet_id              = aws_subnet.public_subnet.id
-  tags = {
-    "Name" = "th-ec2"
-  }
-  root_block_device {
-    volume_size = 40
-  }
+  key_pair_name = "th_key_pair_v2"
 }
 
-resource "aws_security_group" "public_security" {
-  vpc_id = aws_vpc.public_vpc.id
+module "instance_registry" {
+  source = "./modules/instance"
 
-  egress {
-    description = "Any outbound allowed"
-    from_port   = 0
-    to_port     = 65535
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress = [
-    {
-      cidr_blocks      = ["0.0.0.0/0", ]
-      description      = "Allow traffic from ssh client"
-      from_port        = 0
-      to_port          = 65535
-      ipv6_cidr_blocks = []
-      prefix_list_ids  = []
-      protocol         = "tcp"
-      security_groups  = []
-      self             = false
-    }
-  ]
+  key_pair_name = module.instance_key_pair.key_pair_name
+  instance_name = "th-registry"
 }
 
-resource "aws_subnet" "public_subnet" {
-  vpc_id            = aws_vpc.public_vpc.id
-  cidr_block        = "10.0.1.0/24"
-  availability_zone = "us-east-1b"
+module "instance_auth" {
+  source = "./modules/instance"
 
-  map_public_ip_on_launch = true
+  key_pair_name = module.instance_key_pair.key_pair_name
+  instance_name = "th-auth"
 }
 
-resource "aws_route_table_association" "rta" {
-  subnet_id      = aws_subnet.public_subnet.id
-  route_table_id = aws_route_table.to_internet_gateway.id
-}
+# module "instance_product" {
+#   source = "./modules/instance"
 
-resource "aws_route_table" "to_internet_gateway" {
-  vpc_id = aws_vpc.public_vpc.id
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.internet_gateway.id
-  }
-}
+#   key_pair_name = module.instance_key_pair.key_pair_name
+#   instance_name = "th-product"
+# }
 
-resource "aws_vpc" "public_vpc" {
-  cidr_block = "10.0.0.0/16"
-}
+# module "instance_transportation" {
+#   source = "./modules/instance"
 
-resource "aws_internet_gateway" "internet_gateway" {
-  vpc_id = aws_vpc.public_vpc.id
-}
+#   key_pair_name = module.instance_key_pair.key_pair_name
+#   instance_name = "th-transportation"
+# }
 
-# Elastic IP
+# module "instance_orgarnization" {
+#   source = "./modules/instance"
 
-resource "aws_eip" "th_eip" {
-  instance = aws_instance.th-ec2.id
-  vpc      = true
-}
+#   key_pair_name = module.instance_key_pair.key_pair_name
+#   instance_name = "th-orgarnization"
+# }
 
-# Keypair
-resource "aws_key_pair" "th_key_pair" {
-  key_name   = "th_key_pair"
-  public_key = tls_private_key.private_key.public_key_openssh
+# module "instance_route" {
+#   source = "./modules/instance"
 
-  provisioner "local-exec" {
-    command = "echo '${tls_private_key.private_key.private_key_pem}' > ./th2_key_pair.pem"
-  }
-}
+#   key_pair_name = module.instance_key_pair.key_pair_name
+#   instance_name = "th-route"
+# }
 
-## Generate private key
-resource "tls_private_key" "private_key" {
-  algorithm = "RSA"
-}
+# module "instance_user" {
+#   source = "./modules/instance"
+
+#   key_pair_name = module.instance_key_pair.key_pair_name
+#   instance_name = "th-user"
+# }
 

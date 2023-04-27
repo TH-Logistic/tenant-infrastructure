@@ -39,32 +39,6 @@ services:
     command: certonly --webroot --webroot-path /var/www/certbot/ --email thinhlh0812@gmail.com -d thinhlh.com -d www.thinhlh.com -n --agree-tos
     depends_on:
       - nginx
-
-  # nginx:
-  #   image: nginx
-  #   container_name: nginx_container
-  #   restart: always
-  #   ports:
-  #     - 80:80
-  #     - 443:443
-  #   networks:
-  #     - web_server_net
-  #   volumes:
-  #     - ./data/nginx/config:/etc/nginx/conf.d
-  #     - ./data/nginx/web-root:/var/www/html
-  #     - ./data/nginx/certbot-etc:/etc/letsencrypt
-  #     - ./data/nginx/certbot-var:/var/lib/letsencrypt
-
-  # certbot:
-  #   image: certbot/certbot
-  #   container_name: certbot_container
-  #   volumes:
-  #     - ./data/nginx/web-root:/var/www/html
-  #     - ./data/nginx/certbot-etc:/etc/letsencrypt
-  #     - ./data/nginx/certbot-var:/var/lib/letsencrypt
-  #   depends_on:
-  #     - webserver
-  #   command: certonly --webroot --webroot-path=/var/www/html --email vayne.to.0812@gmail.com --agree-tos --no-eff-email --staging -d thinhlh.com -d www.thinhlh.com
 networks:
   web_server_net:
     driver: bridge

@@ -3,7 +3,7 @@
 # Server detail
 
 ```
-ssh -i "th2_key_pair.pem" ubuntu@www.thinhlh.com
+ssh -i "th_key_pair.pem" ubuntu@www.thinhlh.com
 ```
 
 # Steps to setup nginx server with certbot
