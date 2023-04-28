@@ -29,16 +29,6 @@ module "internet_gateway" {
   vpc_id = module.vpc.vpc_id
 }
 
-module "instance_registry" {
-  source = "./modules/instance"
-
-  key_pair_name       = module.instance_key_pair.key_pair_name
-  instance_name       = "th-registry"
-  internet_gateway_id = module.internet_gateway.internet_gateway_id
-  vpc_id              = module.vpc.vpc_id
-  subnet_cidr         = "10.0.10.0/24"
-}
-
 module "instance_auth" {
   source = "./modules/instance"
 
