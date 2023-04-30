@@ -1,3 +1,8 @@
+output "mongo_ip" {
+  description = "Auth public IP address"
+  value       = module.instance_auth.public_ip
+}
+
 output "auth_ip" {
   description = "Auth public IP address"
   value       = module.instance_auth.public_ip
