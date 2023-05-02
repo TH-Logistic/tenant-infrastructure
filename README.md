@@ -1,16 +1,25 @@
-# infrastructure
+# Infrastructure
+> This infrastructure instantiate required components in order to operate the application
 
-# Server detail
-
-```
-ssh -i "th_key_pair.pem" ubuntu@www.thinhlh.com
-```
-
-# Steps to setup nginx server with certbot
+# How to provision?
+1. Fill in the .tfvars file with values in (.tfvars.example)[./.tfvars.example]
+2. Run planning to preview input, output, infrastructure
 
 ```
-docker compose up -d # To run nginx by default with certbot to generate certificates
-sleep 20
-cat ./volumes/nginx/config/default-config-with-ssl.txt >> ./volumes/nginx/config/default.conf
-docker compose exec nginx nginx -s reload
+terraform plan -var-file .tfvars
+```
+3. Run apply to provision infrastructure
+
+```
+terraform apply -var-file .tfvars
+```
+4. Destroy ifnrastructure
+
+```
+terraform destroy -var-file .tfvars
+```
+
+# Outputs
+```
+terraform output
 ```

@@ -1,6 +1,11 @@
 output "mongo_ip" {
   description = "Auth public IP address"
-  value       = module.instance_auth.public_ip
+  value       = module.instance_mongo.public_ip
+}
+
+output "rds_ip"{
+  description = "RDS public IP Address"
+  value = aws_db_instance.instance_rds.address
 }
 
 output "auth_ip" {

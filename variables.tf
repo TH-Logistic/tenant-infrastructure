@@ -23,3 +23,18 @@ variable "key_pair_name" {
   description = "Key pair name for instances"
   type        = string
 }
+
+variable "rds_db_name" {
+  description = "Postgres database name"
+  type = string
+}
+
+variable "rds_username" {
+  description = "Postgres username"
+  type = string
+}
+
+variable "rds_password" {
+  description = "Postgres password"
+  type = string
+}

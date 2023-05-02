@@ -1,4 +1,10 @@
 aws_access_key = ""
 aws_secret_key = ""
 aws_session_token = ""
-region = ""
+aws_region = ""
+
+key_pair_name = ""
+
+rds_db_name = ""
+rds_username= ""
+rds_password = ""

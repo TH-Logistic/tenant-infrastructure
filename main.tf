@@ -14,6 +14,16 @@ provider "aws" {
   token      = var.aws_session_token
 }
 
+resource "aws_db_instance" "instance_rds" {
+  allocated_storage = 10
+  db_name = var.rds_db_name
+  engine = "postgres"
+  instance_class = "db.t2.micro"
+  username = var.rds_username
+  password = var.rds_password
+  skip_final_snapshot = true
+}
+
 module "instance_key_pair" {
   source = "github.com/TH-Logistic/key_pair"
 
@@ -37,6 +47,7 @@ module "instance_mongo" {
   internet_gateway_id = module.internet_gateway.internet_gateway_id
   vpc_id              = module.vpc.vpc_id
   subnet_cidr         = "10.0.0.0/24"
+  user_data           = file("./scripts/docker.sh")
 }
 
 module "instance_auth" {
