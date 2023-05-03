@@ -24,17 +24,37 @@ variable "key_pair_name" {
   type        = string
 }
 
+variable "mongo_db_name" {
+  description = "mongo database name"
+  type        = string
+}
+
+variable "mongo_username" {
+  description = "mongo database username"
+  type        = string
+}
+
+variable "mongo_password" {
+  description = "mongo database password"
+  type        = string
+}
+
+variable "app_secret" {
+  description = "app_secret"
+  type        = string
+}
+
 variable "rds_db_name" {
   description = "Postgres database name"
-  type = string
+  type        = string
 }
 
 variable "rds_username" {
   description = "Postgres username"
-  type = string
+  type        = string
 }
 
 variable "rds_password" {
   description = "Postgres password"
-  type = string
+  type        = string
 }

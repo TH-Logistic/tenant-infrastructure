@@ -14,16 +14,6 @@ provider "aws" {
   token      = var.aws_session_token
 }
 
-resource "aws_db_instance" "instance_rds" {
-  allocated_storage = 10
-  db_name = var.rds_db_name
-  engine = "postgres"
-  instance_class = "db.t2.micro"
-  username = var.rds_username
-  password = var.rds_password
-  skip_final_snapshot = true
-}
-
 module "instance_key_pair" {
   source = "github.com/TH-Logistic/key_pair"
 
@@ -47,7 +37,25 @@ module "instance_mongo" {
   internet_gateway_id = module.internet_gateway.internet_gateway_id
   vpc_id              = module.vpc.vpc_id
   subnet_cidr         = "10.0.0.0/24"
-  user_data           = file("./scripts/docker.sh")
+  user_data = templatefile("./scripts/instance-user-data/mongo-db.tftpl", {
+    mongo_db_name  = var.mongo_db_name
+    mongo_username = var.mongo_username
+    mongo_password = var.mongo_password
+  })
+}
+
+module "instance_rds" {
+  source = "github.com/thinhlh/terraform-rds"
+
+  vpc_id = module.vpc.vpc_id
+  subnet_cidr_1 = "10.0.10.0/24"
+  subnet_cidr_2 = "10.0.20.0/24"
+  internet_gateway_id = module.internet_gateway.internet_gateway_id
+  engine = "postgres"
+  rds_db_name = var.rds_db_name
+  rds_username = var.rds_username
+  rds_password = var.rds_password
+  allocated_storage = 10
 }
 
 module "instance_auth" {
@@ -57,7 +65,17 @@ module "instance_auth" {
   instance_name       = "th-auth"
   internet_gateway_id = module.internet_gateway.internet_gateway_id
   vpc_id              = module.vpc.vpc_id
-  subnet_cidr         = "10.0.10.0/24"
+  subnet_cidr         = "10.0.30.0/24"
+
+  user_data = templatefile("./scripts/instance-user-data/auth-service.tftpl", {
+    algorithm      = "HS256"
+    secret_key     = var.app_secret
+    mongo_host     = module.instance_mongo.public_ip
+    mongo_port     = 27017
+    mongo_db_name  = var.mongo_db_name
+    mongo_username = var.mongo_username
+    mongo_password = var.mongo_password
+  })
 }
 
 module "instance_product" {
@@ -67,7 +85,15 @@ module "instance_product" {
   instance_name       = "th-product"
   internet_gateway_id = module.internet_gateway.internet_gateway_id
   vpc_id              = module.vpc.vpc_id
-  subnet_cidr         = "10.0.20.0/24"
+  subnet_cidr         = "10.0.40.0/24"
+
+  user_data = templatefile("./scripts/instance-user-data/product-service.tftpl", {
+    mongo_host     = module.instance_mongo.public_ip
+    mongo_port     = 27017
+    mongo_db_name  = var.mongo_db_name
+    mongo_username = var.mongo_username
+    mongo_password = var.mongo_password
+  })
 }
 
 module "instance_transportation" {
@@ -77,7 +103,15 @@ module "instance_transportation" {
   instance_name       = "th-transportation"
   internet_gateway_id = module.internet_gateway.internet_gateway_id
   vpc_id              = module.vpc.vpc_id
-  subnet_cidr         = "10.0.30.0/24"
+  subnet_cidr         = "10.0.50.0/24"
+
+  user_data           = templatefile("./scripts/instance-user-data/transportation-service.tftpl",{
+    mongo_host = module.instance_mongo.public_ip
+    mongo_port = 27017
+    mongo_db_name = var.mongo_db_name
+    mongo_username = var.mongo_username
+    mongo_password = var.mongo_password
+  })
 }
 
 module "instance_orgarnization" {
@@ -87,7 +121,15 @@ module "instance_orgarnization" {
   instance_name       = "th-orgarnization"
   internet_gateway_id = module.internet_gateway.internet_gateway_id
   vpc_id              = module.vpc.vpc_id
-  subnet_cidr         = "10.0.40.0/24"
+  subnet_cidr         = "10.0.60.0/24"
+
+  user_data           = templatefile("./scripts/instance-user-data/orgarnization-service.tftpl",{
+    mongo_host = module.instance_mongo.public_ip
+    mongo_port = 27017
+    mongo_db_name = var.mongo_db_name
+    mongo_username = var.mongo_username
+    mongo_password = var.mongo_password
+  })
 }
 
 module "instance_route" {
@@ -97,7 +139,33 @@ module "instance_route" {
   instance_name       = "th-route"
   internet_gateway_id = module.internet_gateway.internet_gateway_id
   vpc_id              = module.vpc.vpc_id
-  subnet_cidr         = "10.0.60.0/24"
+  subnet_cidr         = "10.0.70.0/24"
+
+  user_data           = templatefile("./scripts/instance-user-data/route-service.tftpl",{
+    mongo_host = module.instance_mongo.public_ip
+    mongo_port = 27017
+    mongo_db_name = var.mongo_db_name
+    mongo_username = var.mongo_username
+    mongo_password = var.mongo_password
+  })
+}
+
+module "instance_healthcheck" {
+  source = "github.com/TH-Logistic/ec2"
+
+  key_pair_name       = module.instance_key_pair.key_pair_name
+  instance_name       = "th-healthcheck"
+  internet_gateway_id = module.internet_gateway.internet_gateway_id
+  vpc_id              = module.vpc.vpc_id
+  subnet_cidr         = "10.0.80.0/24"
+
+  user_data           = templatefile("./scripts/instance-user-data/healthcheck-service.tftpl",{
+    mongo_host = module.instance_mongo.public_ip
+    mongo_port = 27017
+    mongo_db_name = var.mongo_db_name
+    mongo_username = var.mongo_username
+    mongo_password = var.mongo_password
+  })
 }
 
 module "instance_user" {
@@ -107,5 +175,15 @@ module "instance_user" {
   instance_name       = "th-user"
   internet_gateway_id = module.internet_gateway.internet_gateway_id
   vpc_id              = module.vpc.vpc_id
-  subnet_cidr         = "10.0.70.0/24"
+  subnet_cidr         = "10.0.90.0/24"
+
+  user_data = templatefile("./scripts/instance-user-data/user-service.tftpl", {
+    mongo_host     = module.instance_mongo.public_ip
+    mongo_port     = 27017
+    mongo_db_name  = var.mongo_db_name
+    mongo_username = var.mongo_username
+    mongo_password = var.mongo_password
+    auth_host      = module.instance_auth.public_ip
+    auth_port      = 8001
+  })
 }
