@@ -16,15 +16,29 @@ services:
     paths:
     - /transportation
 
+- name: garage_service
+  url: http://www.thinhlh.com:8081/api/v1/garage
+  routes:
+  - name: garage_service_route
+    paths:
+    - /garage
+
 - name: route_service
-  url: http://www.thinhlh.com:8082/api/v1/route
+  url: http://www.thinhlh.com:8083/api/v1/route
   routes:
   - name: route_service_route
     paths:
     - /route
 
+- name: location_service
+  url: http://www.thinhlh.com:8083/api/v1/location
+  routes:
+  - name: location_service_route
+    paths:
+    - /location
+
 - name: organization_service
-  url: http://www.thinhlh.com:8083/api/v1/organization
+  url: http://www.thinhlh.com:8082/api/v1/organization
   routes:
   - name: organization_service_route
     paths:
