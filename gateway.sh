@@ -20,3 +20,7 @@ docker run \
     -p 9003:8003 \
     -p 9004:8004 \
     -d kong/kong-gateway:3.2.2.1
+
+# docker-compose --context remote-server-thinhlh -f gateway.docker-compose.yaml down --rmi all --volumes
+# docker-compose --context remote-server-thinhlh -f gateway.docker-compose.yaml up -d
+# docker-compose --context remote-server-thinhlh -f gateway.docker-compose.yaml logs --follow
