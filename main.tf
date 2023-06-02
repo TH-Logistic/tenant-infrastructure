@@ -168,6 +168,24 @@ module "instance_healthcheck" {
   })
 }
 
+module "instance_healthcheck" {
+  source = "github.com/TH-Logistic/ec2"
+
+  key_pair_name       = module.instance_key_pair.key_pair_name
+  instance_name       = "th-billing"
+  internet_gateway_id = module.internet_gateway.internet_gateway_id
+  vpc_id              = module.vpc.vpc_id
+  subnet_cidr         = "10.0.80.0/24"
+
+  user_data           = templatefile("./scripts/instance-user-data/billing-service.tftpl",{
+    mongo_host = module.instance_mongo.public_ip
+    mongo_port = 27017
+    mongo_db_name = var.mongo_db_name
+    mongo_username = var.mongo_username
+    mongo_password = var.mongo_password
+  })
+}
+
 module "instance_user" {
   source = "github.com/TH-Logistic/ec2"
 
