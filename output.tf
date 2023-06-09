@@ -3,14 +3,14 @@ output "mongo_ip" {
   value       = module.instance_mongo.public_ip
 }
 
-output "rds_ip"{
+output "rds_ip" {
   description = "RDS public IP Address"
-  value = module.instance_rds.rds_ip
+  value       = module.instance_rds.rds_ip
 }
 
-output "rds_port"{
+output "rds_port" {
   description = "RDS public IP Address"
-  value = module.instance_rds.rds_port
+  value       = module.instance_rds.rds_port
 }
 
 output "auth_ip" {
