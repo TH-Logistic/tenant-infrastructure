@@ -224,6 +224,26 @@ module "instance_user" {
   })
 }
 
+module "instance_user" {
+  source = "github.com/TH-Logistic/ec2"
+
+  key_pair_name       = module.instance_key_pair.key_pair_name
+  instance_name       = "th-tenant"
+  internet_gateway_id = module.internet_gateway.internet_gateway_id
+  vpc_id              = module.vpc.vpc_id
+  subnet_cidr         = "10.0.120.0/24"
+
+  user_data = templatefile("./scripts/instance-user-data/tenant-service.tftpl", {
+    mongo_host     = module.instance_mongo.public_ip
+    mongo_port     = 27017
+    mongo_db_name  = var.mongo_db_name
+    mongo_username = var.mongo_username
+    mongo_password = var.mongo_password
+    auth_host      = module.instance_auth.public_ip
+    auth_port      = 8002
+  })
+}
+
 module "instance_gateway" {
   source = "github.com/TH-Logistic/ec2"
 
@@ -231,7 +251,7 @@ module "instance_gateway" {
   instance_name       = "th-gateway"
   internet_gateway_id = module.internet_gateway.internet_gateway_id
   vpc_id              = module.vpc.vpc_id
-  subnet_cidr         = "10.0.120.0/24"
+  subnet_cidr         = "10.0.130.0/24"
 
   user_data = templatefile("./scripts/instance-user-data/gateway.tftpl", {
     product_host        = module.instance_product.public_ip
