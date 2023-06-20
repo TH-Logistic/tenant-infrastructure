@@ -48,6 +48,11 @@ output "billing_ip" {
   value       = module.instance_billing.public_ip
 }
 
+output "mail_ip" {
+  description = "Mailing public IP address"
+  value       = module.instance_mail.public_ip
+}
+
 output "user_ip" {
   description = "User public IP address"
   value       = module.instance_user.public_ip
