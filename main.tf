@@ -111,6 +111,8 @@ module "instance_transportation" {
     mongo_db_name  = var.mongo_db_name
     mongo_username = var.mongo_username
     mongo_password = var.mongo_password
+
+    google_map_api_key = "AIzaSyDEokOCthVrnmMPiI_fLEZKQtV1SjFvjxQ"
   })
 }
 
@@ -147,6 +149,8 @@ module "instance_route" {
     mongo_db_name  = var.mongo_db_name
     mongo_username = var.mongo_username
     mongo_password = var.mongo_password
+
+    google_map_api_key = "AIzaSyDEokOCthVrnmMPiI_fLEZKQtV1SjFvjxQ"
   })
 }
 
@@ -178,11 +182,11 @@ module "instance_job" {
   subnet_cidr         = "10.0.90.0/24"
 
   user_data = templatefile("./scripts/instance-user-data/job-service.tftpl", {
-    mongo_host     = module.instance_mongo.public_ip
-    mongo_port     = 27017
-    mongo_db_name  = var.mongo_db_name
-    mongo_username = var.mongo_username
-    mongo_password = var.mongo_password
+    postgres_host     = module.instance_rds.rds_ip
+    postgres_port     = module.instance_rds.rds_port
+    postgres_db       = var.rds_db_name
+    postgres_user     = var.rds_username
+    postgres_password = var.rds_password
   })
 }
 
@@ -196,11 +200,11 @@ module "instance_billing" {
   subnet_cidr         = "10.0.100.0/24"
 
   user_data = templatefile("./scripts/instance-user-data/billing-service.tftpl", {
-    mongo_host     = module.instance_mongo.public_ip
-    mongo_port     = 27017
-    mongo_db_name  = var.mongo_db_name
-    mongo_username = var.mongo_username
-    mongo_password = var.mongo_password
+    postgres_host     = module.instance_rds.rds_ip
+    postgres_port     = module.instance_rds.rds_port
+    postgres_db       = var.rds_db_name
+    postgres_user     = var.rds_username
+    postgres_password = var.rds_password
   })
 }
 
@@ -259,8 +263,6 @@ module "instance_mail" {
     mongo_db_name  = var.mongo_db_name
     mongo_username = var.mongo_username
     mongo_password = var.mongo_password
-    auth_host      = module.instance_auth.public_ip
-    auth_port      = 8002
   })
 }
 
