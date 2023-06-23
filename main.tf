@@ -93,6 +93,8 @@ module "instance_product" {
     mongo_db_name  = var.mongo_db_name
     mongo_username = var.mongo_username
     mongo_password = var.mongo_password
+
+    domain_url = module.instance_gateway.public_ip
   })
 }
 
@@ -112,6 +114,7 @@ module "instance_transportation" {
     mongo_username = var.mongo_username
     mongo_password = var.mongo_password
 
+    domain_url = module.instance_gateway.public_ip
     google_map_api_key = "AIzaSyDEokOCthVrnmMPiI_fLEZKQtV1SjFvjxQ"
   })
 }
@@ -131,6 +134,8 @@ module "instance_organization" {
     mongo_db_name  = var.mongo_db_name
     mongo_username = var.mongo_username
     mongo_password = var.mongo_password
+
+    domain_url = module.instance_gateway.public_ip
   })
 }
 
@@ -150,6 +155,7 @@ module "instance_route" {
     mongo_username = var.mongo_username
     mongo_password = var.mongo_password
 
+    domain_url = module.instance_gateway.public_ip
     google_map_api_key = "AIzaSyDEokOCthVrnmMPiI_fLEZKQtV1SjFvjxQ"
   })
 }
@@ -169,6 +175,8 @@ module "instance_healthcheck" {
     mongo_db_name  = var.mongo_db_name
     mongo_username = var.mongo_username
     mongo_password = var.mongo_password
+
+    domain_url = module.instance_gateway.public_ip
   })
 }
 
@@ -187,6 +195,8 @@ module "instance_job" {
     postgres_db       = var.rds_db_name
     postgres_user     = var.rds_username
     postgres_password = var.rds_password
+
+    domain_url = module.instance_gateway.public_ip
   })
 }
 
@@ -205,6 +215,8 @@ module "instance_billing" {
     postgres_db       = var.rds_db_name
     postgres_user     = var.rds_username
     postgres_password = var.rds_password
+
+    domain_url = module.instance_gateway.public_ip
   })
 }
 
@@ -263,6 +275,8 @@ module "instance_mail" {
     mongo_db_name  = var.mongo_db_name
     mongo_username = var.mongo_username
     mongo_password = var.mongo_password
+
+    domain_url = module.instance_gateway.public_ip
   })
 }
 
