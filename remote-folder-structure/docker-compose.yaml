@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  registry:
+    image: registry
+    container_name: registry_container
+    volumes:
+      - ./volumes/registry/:/var/lib/registry
+    expose:
+      - 5000
+    restart: always
+    networks:
+      - web_server_net
+
+  # Nginx & Certbot refer to https://mindsers.blog/post/https-using-nginx-certbot-docker/
+  nginx:
+    image: nginx
+    container_name: nginx_container
+    volumes:
+      - ./volumes/nginx/config/:/etc/nginx/conf.d/:ro
+      - ./volumes/nginx/certbot/www/:/var/www/certbot/:ro # Map acme volumes to host volumes (which eventually mapped to certbot)
+      - ./volumes/nginx/certbot/conf/:/etc/nginx/ssl/:ro  # Map certificates from host to nginx container for acme references
+    ports:
+      - 80:80
+      - 443:443
+      - 5000:5000
+    networks:
+      - web_server_net
+    restart: always
+    
+
+
+  # After this service run and create ssl certificate we need to reload the nginx service to consume the new certificate
+  certbot:
+    image: certbot/certbot
+    container_name: certbot_container
+    volumes:
+      - ./volumes/nginx/certbot/www/:/var/www/certbot/:rw # Map host volume to certbot create cert folder, which then mapped from host to nginx
+      - ./volumes/nginx/certbot/conf/:/etc/letsencrypt/:rw # Map certificates created folder by certbot to host folder
+    command: certonly --webroot --webroot-path /var/www/certbot/ --email $EMAIL -d $DOMAIN -n --agree-tos
+    depends_on:
+      - nginx
+    environment:
+      - DOMAIN
+      - EMAIL
+networks:
+  web_server_net:
+    driver: bridge
