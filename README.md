@@ -1,5 +1,5 @@
 # Tenancy Infrastructure
-> This infrastructure instantiate required components in order to operate the TH Logistic multi tenancy system.
+> This infrastructure instantiate required components in order to operate the application for each tenant
 
 # How to provision?
 1. Fill in the .tfvars file with values in (.tfvars.example)[./.tfvars.example]

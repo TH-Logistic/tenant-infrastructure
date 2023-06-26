@@ -1,1 +1,0 @@
-# This folder will be copy to remote server for instantiate the registry

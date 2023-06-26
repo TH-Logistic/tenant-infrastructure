@@ -1,0 +1,15 @@
+#!/bin/bash
+
+REGISTRY=registry.thinhlh.com
+
+docker run \
+    --env POSTGRES_HOST=${postgres_host} \
+    --env POSTGRES_PORT=${postgres_port} \
+    --env POSTGRES_DB=${postgres_db} \
+    --env POSTGRES_USER=${postgres_user} \
+    --env POSTGRES_PASSWORD=${postgres_password} \
+    --env DOMAIN_URL=${domain_url} \
+    -p 8085:8085 \
+    --name job_container \
+    -d \
+    $REGISTRY/job_service:latest
