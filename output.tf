@@ -5,12 +5,12 @@ output "mongo_ip" {
 
 output "rds_ip" {
   description = "RDS public IP Address"
-  value       = module.instance_rds.rds_ip
+  value       = module.instance_rds.public_ip
 }
 
 output "rds_port" {
   description = "RDS public IP Address"
-  value       = module.instance_rds.rds_port
+  value       = 5432
 }
 
 output "auth_ip" {

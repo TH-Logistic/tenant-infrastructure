@@ -11,6 +11,9 @@ mongo_password = ""
 
 app_secret = ""
 
+root_user = ""
+root_password = ""
+
 rds_db_name = ""
 rds_username= ""
 rds_password = ""

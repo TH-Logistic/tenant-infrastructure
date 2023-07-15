@@ -44,18 +44,33 @@ module "instance_mongo" {
   })
 }
 
-module "instance_rds" {
-  source = "github.com/thinhlh/terraform-rds"
+# module "instance_rds" {
+#   source = "github.com/thinhlh/terraform-rds"
 
-  vpc_id              = module.vpc.vpc_id
-  subnet_cidr_1       = "10.0.10.0/24"
-  subnet_cidr_2       = "10.0.20.0/24"
+#   vpc_id              = module.vpc.vpc_id
+#   subnet_cidr_1       = "10.0.10.0/24"
+#   subnet_cidr_2       = "10.0.20.0/24"
+#   internet_gateway_id = module.internet_gateway.internet_gateway_id
+#   engine              = "postgres"
+#   rds_db_name         = var.rds_db_name
+#   rds_username        = var.rds_username
+#   rds_password        = var.rds_password
+#   allocated_storage   = 10
+# }
+
+module "instance_rds" {
+  source = "github.com/TH-Logistic/ec2"
+
+  key_pair_name       = module.instance_key_pair.key_pair_name
+  instance_name       = "th-rds"
   internet_gateway_id = module.internet_gateway.internet_gateway_id
-  engine              = "postgres"
-  rds_db_name         = var.rds_db_name
-  rds_username        = var.rds_username
-  rds_password        = var.rds_password
-  allocated_storage   = 10
+  vpc_id              = module.vpc.vpc_id
+  subnet_cidr         = "10.0.10.0/24"
+  user_data = templatefile("./scripts/instance-user-data/postgres-db.tftpl", {
+    postgres_db = var.rds_db_name
+    postgres_user = var.rds_username
+    postgres_password = rds_password
+  })
 }
 
 module "instance_auth" {
@@ -190,8 +205,8 @@ module "instance_job" {
   subnet_cidr         = "10.0.90.0/24"
 
   user_data = templatefile("./scripts/instance-user-data/job-service.tftpl", {
-    postgres_host     = module.instance_rds.rds_ip
-    postgres_port     = module.instance_rds.rds_port
+    postgres_host     = module.instance_rds.public_ip
+    postgres_port     = 5432
     postgres_db       = var.rds_db_name
     postgres_user     = var.rds_username
     postgres_password = var.rds_password
@@ -210,8 +225,8 @@ module "instance_billing" {
   subnet_cidr         = "10.0.100.0/24"
 
   user_data = templatefile("./scripts/instance-user-data/billing-service.tftpl", {
-    postgres_host     = module.instance_rds.rds_ip
-    postgres_port     = module.instance_rds.rds_port
+    postgres_host     = module.instance_rds.public_ip
+    postgres_port     = 5432
     postgres_db       = var.rds_db_name
     postgres_user     = var.rds_username
     postgres_password = var.rds_password
@@ -237,6 +252,8 @@ module "instance_user" {
     mongo_password = var.mongo_password
     auth_host      = module.instance_auth.public_ip
     auth_port      = 8001
+    root_user = var.root_password
+    root_password = var.root_user
   })
 }
 

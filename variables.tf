@@ -44,6 +44,16 @@ variable "app_secret" {
   type        = string
 }
 
+variable "root_user" {
+  description = "Root User"
+  type = string
+}
+
+variable "root_password" {
+  description = "Root Password"
+  type = string
+}
+
 variable "rds_db_name" {
   description = "Postgres database name"
   type        = string
