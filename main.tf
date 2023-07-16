@@ -250,8 +250,7 @@ module "instance_user" {
     mongo_db_name  = var.mongo_db_name
     mongo_username = var.mongo_username
     mongo_password = var.mongo_password
-    auth_host      = module.instance_auth.public_ip
-    auth_port      = 8001
+    auth_url = "${module.instance_auth.public_ip}:8000"
     root_user = var.root_password
     root_password = var.root_user
   })
